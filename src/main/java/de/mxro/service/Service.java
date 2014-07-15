@@ -6,7 +6,7 @@ import de.mxro.service.callbacks.StartCallback;
 public interface Service {
 
 	/**
-	 * This service can be called to shutdown this components 'gracefully'.
+	 * Call to shutdown this components 'gracefully'.
 	 * 
 	 * @param callback
 	 */
