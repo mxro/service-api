@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
-import mx.gwtutils.concurrent.SingleInstanceQueueWorker;
+import mx.gwtutils.concurrent.SingleInstanceThread;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
@@ -14,7 +14,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
-	private final SingleInstanceQueueWorker<ServiceRegistryOperation> worker;
+	private final SingleInstanceThread worker;
 	
 	
 	@Override
@@ -57,7 +57,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public <InterfaceType> void start(List<Class<InterfaceType>> services,
 			StartCallback callback) {
-		start()
+		this.worker.
 	}
 
 
