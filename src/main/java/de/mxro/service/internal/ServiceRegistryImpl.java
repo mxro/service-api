@@ -18,7 +18,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 				return (InterfaceType) service;
 			}
 		}
-		throw new RuntimeException("No service in registry which supports interface: "+clazz);
+		throw new RuntimeException("No service in registry which supports interface "+clazz);
 	}
 
 	@Override
