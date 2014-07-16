@@ -7,6 +7,7 @@ import java.util.List;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
+import de.mxro.service.callbacks.StartCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 
@@ -24,8 +25,22 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					return;
 				}
 				
+				service.start(new StartCallback() {
+					
+					@Override
+					public void onStarted() {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onFailure(Throwable t) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
 				return;
-				return (InterfaceType) service;
 			}
 		}
 		throw new RuntimeException("No service in registry which supports interface "+clazz);
@@ -39,6 +54,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	public ServiceRegistryImpl() {
 		super();
 		this.services = new ArrayList<Service>();
+		this.initialized = new IdentityHashMap<Service, Boolean>();
 	}
 
 	
