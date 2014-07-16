@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+import mx.gwtutils.concurrent.SingleInstanceQueueWorker;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
@@ -13,6 +14,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
+	private final SingleInstanceQueueWorker<ServiceRegistryOperation> worker;
 	
 	
 	@Override
@@ -20,7 +22,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		services.add(service);
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
@@ -51,16 +52,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		throw new RuntimeException("No service in registry which supports interface "+clazz);
 	}
 
-	
-	
-	
-	
+
 	
 	@Override
 	public <InterfaceType> void start(List<Class<InterfaceType>> services,
 			StartCallback callback) {
-		// TODO Auto-generated method stub
-		
+		start()
 	}
 
 
