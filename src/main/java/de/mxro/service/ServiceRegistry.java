@@ -13,4 +13,9 @@ public interface ServiceRegistry {
 
 	public void register(Service service);
 	
+	/**
+	 * Disallow registration of any more services.
+	 */
+	public void lock();
+	
 }
