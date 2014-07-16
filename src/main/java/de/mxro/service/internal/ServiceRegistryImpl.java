@@ -18,7 +18,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
 		for (final Service service: services) {
-			if (service.supports(clazz)) {
+			if (clazz.equals(service.getClass()) || service.supports(clazz)) {
 				
 				if (initialized.get(service)) {
 					callback.onSuccess((InterfaceType) service);
@@ -44,6 +44,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		throw new RuntimeException("No service in registry which supports interface "+clazz);
 	}
 
+	
+	
 	@Override
 	public void register(Service service) {
 		services.add(service);
