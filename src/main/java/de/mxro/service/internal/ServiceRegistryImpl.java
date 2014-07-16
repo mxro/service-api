@@ -14,6 +14,13 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
 	
+	
+	@Override
+	public void register(Service service) {
+		services.add(service);
+	}
+
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
@@ -46,10 +53,16 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	
 	
+	
+	
+	
 	@Override
-	public void register(Service service) {
-		services.add(service);
+	public <InterfaceType> void start(List<Class<InterfaceType>> services,
+			StartCallback callback) {
+		// TODO Auto-generated method stub
+		
 	}
+
 
 	public ServiceRegistryImpl() {
 		super();
