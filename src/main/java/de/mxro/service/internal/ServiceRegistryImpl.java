@@ -16,8 +16,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <InterfaceType> void get(Class<InterfaceType> clazz, GetServiceCallback<InterfaceType> callback) {
-		for (Service service: services) {
+	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
+		for (final Service service: services) {
 			if (service.supports(clazz)) {
 				
 				if (initialized.get(service)) {
@@ -29,14 +29,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					
 					@Override
 					public void onStarted() {
-						// TODO Auto-generated method stub
-						
+						callback.onSuccess((InterfaceType) service);
 					}
 					
 					@Override
 					public void onFailure(Throwable t) {
-						// TODO Auto-generated method stub
-						
+						callback.onFailure(t);
 					}
 				});
 				
