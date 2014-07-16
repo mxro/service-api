@@ -10,11 +10,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public Service get(Class<?> clazz) {
+	public <InterfaceType> InterfaceType get(Class<InterfaceType> clazz) {
 		for (Service service: services) {
 			if (service.supports(clazz)) {
-				return service;
+				return (InterfaceType) service;
 			}
 		}
 		throw new RuntimeException("No service in registry which supports interface: "+clazz);
