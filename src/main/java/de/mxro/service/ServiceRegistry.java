@@ -9,7 +9,7 @@ public interface ServiceRegistry {
 	 * @param clazz
 	 * @return
 	 */
-	public Service get(Class<?> clazz);
+	public <InterfaceType> InterfaceType get(Class<InterfaceType> clazz);
 
 	public void register(Service service);
 	
