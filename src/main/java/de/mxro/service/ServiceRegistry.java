@@ -1,5 +1,7 @@
 package de.mxro.service;
 
+import de.mxro.service.callbacks.GetServiceCallback;
+
 public interface ServiceRegistry {
 
 	/**
@@ -9,7 +11,7 @@ public interface ServiceRegistry {
 	 * @param clazz
 	 * @return
 	 */
-	public <InterfaceType> InterfaceType get(Class<InterfaceType> clazz);
+	public <InterfaceType> void get(Class<InterfaceType> clazz, GetServiceCallback<InterfaceType> callback);
 
 	public void register(Service service);
 	
