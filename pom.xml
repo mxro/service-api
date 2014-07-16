@@ -24,8 +24,12 @@
 	<!-- Dependent Modules -->
 	<dependencies>
 
-		
-		
+		<dependency>
+			<groupId>de.mxro.gtwutils</groupId>
+			<artifactId>mxGWTUtils</artifactId>
+			<version>[0.0.1,)</version>
+		</dependency>
+
 		<!-- only for gwt maven plugin!!! -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
