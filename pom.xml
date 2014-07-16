@@ -24,11 +24,7 @@
 	<!-- Dependent Modules -->
 	<dependencies>
 
-		<dependency>
-			<groupId>de.mxro.factories</groupId>
-			<artifactId>factories</artifactId>
-			<version>[0.0.1,)</version>
-		</dependency>
+		
 		
 		<!-- only for gwt maven plugin!!! -->
 		<dependency>
