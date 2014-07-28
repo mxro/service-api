@@ -19,7 +19,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final class InitializationEntry {
 		public Service service;
-		public GetServiceCallback<?> callback;
+		public GetServiceCallback<Object> callback;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					if (initializing.containsKey(service)) {
 						InitializationEntry e = new InitializationEntry();
 						e.service = service;
-						e.callback = callback;
+						e.callback = (GetServiceCallback<Object>) callback;
 						initializing.get(service).add(e);
 						return;
 					}
@@ -60,7 +60,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						callback.onSuccess((InterfaceType) service);
 						
 						synchronized (initializing) {
-							
+							List<InitializationEntry> entries = initializing.get(service);
+							for (InitializationEntry e: entries) {
+								e.callback.onSuccess(service);
+								return;
+							}
 						}
 						
 					}
