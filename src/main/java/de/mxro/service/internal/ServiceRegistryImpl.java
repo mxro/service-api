@@ -65,7 +65,16 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						public void onStarted() {
 							callback.onSuccess((InterfaceType) service);
 							
-							subscribed.put(service);
+							final Integer subscribers;
+							synchronized (subscribed) {
+								subscribers = subscribed.get(service);
+								if (subscribers == null) {
+									subscribed.put(service, 1);
+								} else {
+									subscribed.put(service, subscribers+1);
+								}
+							}
+							
 							
 							synchronized (initializing) {
 								
