@@ -14,7 +14,7 @@ import de.mxro.service.callbacks.StartCallback;
 public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
-	private final IdentityHashMap<Service, Boolean> initialized;
+	private final IdentityHashMap<Service, Integer> subscribed;
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
 
 	private final class InitializationEntry {
@@ -50,7 +50,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								new LinkedList<InitializationEntry>());
 					}
 
-					if (initialized.get(service)) {
+					if (subscribed.get(service) > 0) {
 						callback.onSuccess((InterfaceType) service);
 						return;
 					}
@@ -90,7 +90,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	public ServiceRegistryImpl() {
 		super();
 		this.services = new ArrayList<Service>();
-		this.initialized = new IdentityHashMap<Service, Boolean>();
+		this.subscribed = new IdentityHashMap<Service, Boolean>();
 		this.initializing = new IdentityHashMap<Service, List<InitializationEntry>>();
 	}
 
