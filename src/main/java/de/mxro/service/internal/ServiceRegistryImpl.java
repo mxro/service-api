@@ -142,6 +142,26 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			if (subscribers == 1) {
 				subscribed.remove(service);
 
+				synchronized (deinitializing) {
+					
+					assert !deinitializing.containsKey(service);
+					
+					deinitializing.put(service, new LinkedList<ServiceRegistryImpl.DeinitializationEntry>());
+
+					service.stop(new ShutdownCallback() {
+						
+						@Override
+						public void onShutdownComplete() {
+							
+						}
+						
+						@Override
+						public void onFailure(Throwable t) {
+							throw new RuntimeException(t);
+						}
+					});
+					
+				}
 				
 			} else {
 				subscribed.put(service, subscribers - 1);
