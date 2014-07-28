@@ -14,7 +14,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
-	
+	private final IdentityHashMap<Service, Boolean> initializing;
 	
 	@Override
 	public void register(Service service) {
