@@ -18,7 +18,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
 
 	private final class InitializationEntry {
-		public Service service;
+	
 		public GetServiceCallback<Object> callback;
 	}
 
@@ -38,7 +38,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 				synchronized (initializing) {
 					if (initializing.containsKey(service)) {
 						InitializationEntry e = new InitializationEntry();
-						e.service = service;
 						e.callback = (GetServiceCallback<Object>) callback;
 						initializing.get(service).add(e);
 						return;
@@ -65,6 +64,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								e.callback.onSuccess(service);
 								return;
 							}
+							initializing.remove(service);
 						}
 						
 					}
