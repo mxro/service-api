@@ -36,6 +36,111 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <InterfaceType> void subscribe(final Class<InterfaceType> clazz,
+			final GetServiceCallback<InterfaceType> callback) {
+		ArrayList<Service> servicesCopy;
+		synchronized (services) {
+			servicesCopy = new ArrayList<Service>(services);
+		}
+
+		for (final Service service : servicesCopy) {
+			
+			if (clazz.equals(service.getClass())
+					|| (service instanceof SafeCast && ((SafeCast) service)
+							.supports(clazz))) {
+				
+				final Integer subscribers;
+				synchronized (subscribed) {
+					subscribers = subscribed.get(service);
+				}
+				
+				if (subscribers != null && subscribers > 0) {
+					callback.onSuccess((InterfaceType) service);
+					return;
+				}
+
+				synchronized (initializing) {
+					if (initializing.containsKey(service)) {
+						InitializationEntry e = new InitializationEntry();
+						e.callback = (GetServiceCallback<Object>) callback;
+						initializing.get(service).add(e);
+						return;
+					}
+
+					initializing.put(service,
+							new LinkedList<InitializationEntry>());
+				}
+
+				synchronized (deinitializing) {
+					if (deinitializing.containsKey(service)) {
+						DeinitializationEntry e = new DeinitializationEntry();
+						e.callback = new ShutdownCallback() {
+
+							@Override
+							public void onShutdownComplete() {
+								subscribe(clazz, callback);
+							}
+
+							@Override
+							public void onFailure(Throwable t) {
+								callback.onFailure(new Exception(
+										"Error during pending deinitialization.",
+										t));
+							}
+						};
+						deinitializing.get(service).add(e);
+						return;
+					}
+				}
+			
+				service.start(new StartCallback() {
+
+					@Override
+					public void onStarted() {
+
+						final Integer subscribers;
+						synchronized (subscribed) {
+							subscribers = subscribed.get(service);
+							if (subscribers == null) {
+								subscribed.put(service, 1);
+							} else {
+								subscribed.put(service, subscribers + 1);
+							}
+						}
+
+						synchronized (initializing) {
+
+							List<InitializationEntry> entries = initializing
+									.get(service);
+							for (InitializationEntry e : entries) {
+								e.callback.onSuccess(service);
+								return;
+							}
+							initializing.remove(service);
+						}
+
+						callback.onSuccess((InterfaceType) service);
+
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						callback.onFailure(t);
+					}
+				});
+
+				return;
+			}
+	
+		}
+		throw new RuntimeException(
+				"No service in registry which supports interface " + clazz);
+
+	}
+
+	
 	@Override
 	public void unsubscribe(final Service service,
 			final ServiceUnsubscribedCallback callback) {
