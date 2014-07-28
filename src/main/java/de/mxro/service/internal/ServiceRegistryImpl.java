@@ -154,7 +154,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						public void onShutdownComplete() {
 							synchronized (deinitializing) {
 								
-								deinitializing.get(service);
+								for (DeinitializationEntry e: deinitializing.get(service)) {
+									e.callback.onShutdownComplete();
+								}
+								
+								deinitializing.remove(service);
 								
 							}
 						}
@@ -181,6 +185,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		this.services = new ArrayList<Service>();
 		this.subscribed = new IdentityHashMap<Service, Integer>();
 		this.initializing = new IdentityHashMap<Service, List<InitializationEntry>>();
+		this.deinitializing = new IdentityHashMap<Service, List<DeinitializationEntry>>();
 	}
 
 }
