@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
-import mx.gwtutils.concurrent.SingleInstanceThread;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
@@ -50,14 +49,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			}
 		}
 		throw new RuntimeException("No service in registry which supports interface "+clazz);
-	}
-
-
-	
-	@Override
-	public <InterfaceType> void start(List<Class<InterfaceType>> services,
-			StartCallback callback) {
-		
 	}
 
 
