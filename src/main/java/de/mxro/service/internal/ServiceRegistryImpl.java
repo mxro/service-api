@@ -46,10 +46,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		}
 
 		for (final Service service : servicesCopy) {
+			
 			if (clazz.equals(service.getClass())
 					|| (service instanceof SafeCast && ((SafeCast) service)
 							.supports(clazz))) {
-
+				
 				final Integer subscribers;
 				synchronized (subscribed) {
 					subscribers = subscribed.get(service);
@@ -132,6 +133,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 				return;
 			}
 	
+		}
 		throw new RuntimeException(
 				"No service in registry which supports interface " + clazz);
 
