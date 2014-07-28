@@ -5,6 +5,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 
 import mx.gwtutils.concurrent.SingleInstanceThread;
+import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
@@ -14,7 +15,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
-	private final SingleInstanceThread worker;
 	
 	
 	@Override
@@ -26,7 +26,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
 		for (final Service service: services) {
-			if (clazz.equals(service.getClass()) || service.supports(clazz)) {
+			if (clazz.equals(service.getClass()) || (service instanceof SafeCast && ((SafeCast) service).supports(clazz))) {
 				
 				if (initialized.get(service)) {
 					callback.onSuccess((InterfaceType) service);
@@ -57,7 +57,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public <InterfaceType> void start(List<Class<InterfaceType>> services,
 			StartCallback callback) {
-		this.worker.
+		
 	}
 
 
