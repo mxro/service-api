@@ -2,6 +2,7 @@ package de.mxro.service.internal;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.mxro.service.SafeCast;
@@ -15,12 +16,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
-	
+
 	private final class InitializationEntry {
 		public Service service;
 		public GetServiceCallback<?> callback;
 	}
-	
+
 	@Override
 	public void register(Service service) {
 		services.add(service);
@@ -28,43 +29,49 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
-		for (final Service service: services) {
-			if (clazz.equals(service.getClass()) || (service instanceof SafeCast && ((SafeCast) service).supports(clazz))) {
-				if (initializing.containsKey(service)) {
-					InitializationEntry e = new InitializationEntry();
-					e.service = service;
-					e.callback = callback;
-					initializing.get(service).add(e);
-					return;
+	public <InterfaceType> void get(final Class<InterfaceType> clazz,
+			final GetServiceCallback<InterfaceType> callback) {
+		for (final Service service : services) {
+			if (clazz.equals(service.getClass())
+					|| (service instanceof SafeCast && ((SafeCast) service)
+							.supports(clazz))) {
+				synchronized (initializing) {
+					if (initializing.containsKey(service)) {
+						InitializationEntry e = new InitializationEntry();
+						e.service = service;
+						e.callback = callback;
+						initializing.get(service).add(e);
+						return;
+					}
+
+					initializing.put(service,
+							new LinkedList<InitializationEntry>());
 				}
-				
-				
-				
+
 				if (initialized.get(service)) {
 					callback.onSuccess((InterfaceType) service);
 					return;
 				}
-				
+
 				service.start(new StartCallback() {
-					
+
 					@Override
 					public void onStarted() {
 						callback.onSuccess((InterfaceType) service);
 					}
-					
+
 					@Override
 					public void onFailure(Throwable t) {
 						callback.onFailure(t);
 					}
 				});
-				
+
 				return;
 			}
 		}
-		throw new RuntimeException("No service in registry which supports interface "+clazz);
+		throw new RuntimeException(
+				"No service in registry which supports interface " + clazz);
 	}
-
 
 	public ServiceRegistryImpl() {
 		super();
@@ -72,6 +79,4 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		this.initialized = new IdentityHashMap<Service, Boolean>();
 	}
 
-	
-	
 }
