@@ -24,7 +24,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	@Override
 	public void register(Service service) {
-		synchronized (service) {
+		synchronized (services) {
 			services.add(service);
 		}
 	}
