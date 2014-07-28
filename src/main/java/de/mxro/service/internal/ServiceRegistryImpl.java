@@ -63,7 +63,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 						@Override
 						public void onStarted() {
-							callback.onSuccess((InterfaceType) service);
 							
 							final Integer subscribers;
 							synchronized (subscribed) {
@@ -86,6 +85,9 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								}
 								initializing.remove(service);
 							}
+							
+							callback.onSuccess((InterfaceType) service);
+							
 
 						}
 
@@ -101,6 +103,15 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			throw new RuntimeException(
 					"No service in registry which supports interface " + clazz);
 		}
+	}
+
+	
+	
+	@Override
+	public void unsubscribe(Service service) {
+		
+		
+		
 	}
 
 	public ServiceRegistryImpl() {
