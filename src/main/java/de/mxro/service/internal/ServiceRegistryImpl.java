@@ -14,7 +14,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Boolean> initialized;
-	private final IdentityHashMap<Service, Boolean> initializing;
+	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
+	
+	private final class InitializationEntry {
+		public Service service;
+		public GetServiceCallback<?> callback;
+	}
 	
 	@Override
 	public void register(Service service) {
@@ -26,6 +31,15 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	public <InterfaceType> void get(final Class<InterfaceType> clazz, final GetServiceCallback<InterfaceType> callback) {
 		for (final Service service: services) {
 			if (clazz.equals(service.getClass()) || (service instanceof SafeCast && ((SafeCast) service).supports(clazz))) {
+				if (initializing.containsKey(service)) {
+					InitializationEntry e = new InitializationEntry();
+					e.service = service;
+					e.callback = callback;
+					initializing.get(service).add(e);
+					return;
+				}
+				
+				
 				
 				if (initialized.get(service)) {
 					callback.onSuccess((InterfaceType) service);
