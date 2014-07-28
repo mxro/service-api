@@ -9,6 +9,7 @@ import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
+import de.mxro.service.callbacks.ServiceUnsubscribedCallback;
 import de.mxro.service.callbacks.ShutdownCallback;
 import de.mxro.service.callbacks.StartCallback;
 
@@ -130,7 +131,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	}
 
 	@Override
-	public void unsubscribe(final Service service) {
+	public void unsubscribe(final Service service, ServiceUnsubscribedCallback callback) {
 		synchronized (subscribed) {
 			Integer subscribers = subscribed.get(service);
 
@@ -165,7 +166,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						
 						@Override
 						public void onFailure(Throwable t) {
-							throw new RuntimeException(t);
+							callback.onFailure(t);
 						}
 					});
 					
