@@ -187,6 +187,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 			} else {
 				subscribed.put(service, subscribers - 1);
+				callback.onServiceUnsubscribed();
 			}
 		}
 
