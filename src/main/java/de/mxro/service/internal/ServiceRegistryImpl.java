@@ -49,12 +49,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						initializing.put(service,
 								new LinkedList<InitializationEntry>());
 					}
-					
+
 					final Integer subscribers;
 					synchronized (subscribed) {
 						subscribers = subscribed.get(service);
 					}
-					if (subscribers != null && subscribers > 0 ) {
+					if (subscribers != null && subscribers > 0) {
 						callback.onSuccess((InterfaceType) service);
 						return;
 					}
@@ -63,20 +63,19 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 						@Override
 						public void onStarted() {
-							
+
 							final Integer subscribers;
 							synchronized (subscribed) {
 								subscribers = subscribed.get(service);
 								if (subscribers == null) {
 									subscribed.put(service, 1);
 								} else {
-									subscribed.put(service, subscribers+1);
+									subscribed.put(service, subscribers + 1);
 								}
 							}
-							
-							
+
 							synchronized (initializing) {
-								
+
 								List<InitializationEntry> entries = initializing
 										.get(service);
 								for (InitializationEntry e : entries) {
@@ -85,9 +84,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								}
 								initializing.remove(service);
 							}
-							
+
 							callback.onSuccess((InterfaceType) service);
-							
 
 						}
 
@@ -105,13 +103,24 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		}
 	}
 
-	
-	
 	@Override
 	public void unsubscribe(Service service) {
-		
-		
-		
+		synchronized (subscribed) {
+			Integer subscribers = subscribed.get(service);
+
+			if (subscribers == null || subscribers == 0) {
+				throw new IllegalArgumentException(
+						"Trying to unsubscribe service that has not been subscribed to.");
+			}
+
+			if (subscribers == 1) {
+				subscribed.remove(service);
+
+			} else {
+				subscribed.put(service, subscribers - 1);
+			}
+		}
+
 	}
 
 	public ServiceRegistryImpl() {
