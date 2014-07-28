@@ -40,10 +40,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public <InterfaceType> void subscribe(final Class<InterfaceType> clazz,
 			final GetServiceCallback<InterfaceType> callback) {
+		ArrayList<Service> servicesCopy;
 		synchronized (services) {
+			servicesCopy = new ArrayList<Service>(services);
 		}
 
-		for (final Service service : services) {
+		for (final Service service : servicesCopy) {
 			if (clazz.equals(service.getClass())
 					|| (service instanceof SafeCast && ((SafeCast) service)
 							.supports(clazz))) {
