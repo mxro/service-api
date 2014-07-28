@@ -130,7 +130,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	}
 
 	@Override
-	public void unsubscribe(Service service) {
+	public void unsubscribe(final Service service) {
 		synchronized (subscribed) {
 			Integer subscribers = subscribed.get(service);
 
@@ -152,7 +152,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						
 						@Override
 						public void onShutdownComplete() {
-							
+							synchronized (deinitializing) {
+								
+								deinitializing.get(service);
+								
+							}
 						}
 						
 						@Override
