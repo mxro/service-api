@@ -68,7 +68,20 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 					synchronized (deinitializing) {
 						if (deinitializing.containsKey(service)) {
-							
+							DeinitializationEntry e = new DeinitializationEntry();
+							e.callback = new ShutdownCallback() {
+								
+								@Override
+								public void onShutdownComplete() {
+									subscribe(clazz, callback);
+								}
+								
+								@Override
+								public void onFailure(Throwable t) {
+									callback.onFailure(new Exception("Error during pending deinitialization.", t));;
+								}
+							};
+							deinitializing.get(service).add(e);
 						}
 					}
 
