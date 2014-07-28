@@ -11,7 +11,7 @@ public interface ServiceRegistry {
 	 * @param clazz
 	 * @return
 	 */
-	public <InterfaceType> void get(Class<InterfaceType> clazz, GetServiceCallback<InterfaceType> callback);
+	public <InterfaceType> void subscribe(Class<InterfaceType> clazz, GetServiceCallback<InterfaceType> callback);
 
 	public void register(Service service);
 	

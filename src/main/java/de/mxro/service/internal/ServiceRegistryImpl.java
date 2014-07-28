@@ -31,7 +31,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <InterfaceType> void get(final Class<InterfaceType> clazz,
+	public <InterfaceType> void subscribe(final Class<InterfaceType> clazz,
 			final GetServiceCallback<InterfaceType> callback) {
 		synchronized (services) {
 			for (final Service service : services) {
