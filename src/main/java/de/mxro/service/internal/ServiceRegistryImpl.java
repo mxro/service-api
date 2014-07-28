@@ -18,68 +18,73 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
 
 	private final class InitializationEntry {
-	
+
 		public GetServiceCallback<Object> callback;
 	}
 
 	@Override
 	public void register(Service service) {
-		services.add(service);
+		synchronized (service) {
+			services.add(service);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <InterfaceType> void get(final Class<InterfaceType> clazz,
 			final GetServiceCallback<InterfaceType> callback) {
-		for (final Service service : services) {
-			if (clazz.equals(service.getClass())
-					|| (service instanceof SafeCast && ((SafeCast) service)
-							.supports(clazz))) {
-				synchronized (initializing) {
-					if (initializing.containsKey(service)) {
-						InitializationEntry e = new InitializationEntry();
-						e.callback = (GetServiceCallback<Object>) callback;
-						initializing.get(service).add(e);
+		synchronized (services) {
+			for (final Service service : services) {
+				if (clazz.equals(service.getClass())
+						|| (service instanceof SafeCast && ((SafeCast) service)
+								.supports(clazz))) {
+					synchronized (initializing) {
+						if (initializing.containsKey(service)) {
+							InitializationEntry e = new InitializationEntry();
+							e.callback = (GetServiceCallback<Object>) callback;
+							initializing.get(service).add(e);
+							return;
+						}
+
+						initializing.put(service,
+								new LinkedList<InitializationEntry>());
+					}
+
+					if (initialized.get(service)) {
+						callback.onSuccess((InterfaceType) service);
 						return;
 					}
 
-					initializing.put(service,
-							new LinkedList<InitializationEntry>());
-				}
+					service.start(new StartCallback() {
 
-				if (initialized.get(service)) {
-					callback.onSuccess((InterfaceType) service);
+						@Override
+						public void onStarted() {
+							callback.onSuccess((InterfaceType) service);
+
+							synchronized (initializing) {
+								List<InitializationEntry> entries = initializing
+										.get(service);
+								for (InitializationEntry e : entries) {
+									e.callback.onSuccess(service);
+									return;
+								}
+								initializing.remove(service);
+							}
+
+						}
+
+						@Override
+						public void onFailure(Throwable t) {
+							callback.onFailure(t);
+						}
+					});
+
 					return;
 				}
-
-				service.start(new StartCallback() {
-
-					@Override
-					public void onStarted() {
-						callback.onSuccess((InterfaceType) service);
-						
-						synchronized (initializing) {
-							List<InitializationEntry> entries = initializing.get(service);
-							for (InitializationEntry e: entries) {
-								e.callback.onSuccess(service);
-								return;
-							}
-							initializing.remove(service);
-						}
-						
-					}
-
-					@Override
-					public void onFailure(Throwable t) {
-						callback.onFailure(t);
-					}
-				});
-
-				return;
 			}
+			throw new RuntimeException(
+					"No service in registry which supports interface " + clazz);
 		}
-		throw new RuntimeException(
-				"No service in registry which supports interface " + clazz);
 	}
 
 	public ServiceRegistryImpl() {
