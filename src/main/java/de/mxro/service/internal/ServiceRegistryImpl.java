@@ -16,6 +16,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Integer> subscribed;
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
+	private final IdentityHashMap<Service, List<InitializationEntry>> deinitializing;
 
 	private final class InitializationEntry {
 
@@ -38,6 +39,16 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 				if (clazz.equals(service.getClass())
 						|| (service instanceof SafeCast && ((SafeCast) service)
 								.supports(clazz))) {
+					
+					final Integer subscribers;
+					synchronized (subscribed) {
+						subscribers = subscribed.get(service);
+					}
+					if (subscribers != null && subscribers > 0) {
+						callback.onSuccess((InterfaceType) service);
+						return;
+					}
+					
 					synchronized (initializing) {
 						if (initializing.containsKey(service)) {
 							InitializationEntry e = new InitializationEntry();
@@ -50,14 +61,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								new LinkedList<InitializationEntry>());
 					}
 
-					final Integer subscribers;
-					synchronized (subscribed) {
-						subscribers = subscribed.get(service);
-					}
-					if (subscribers != null && subscribers > 0) {
-						callback.onSuccess((InterfaceType) service);
-						return;
-					}
+					
 
 					service.start(new StartCallback() {
 
@@ -116,11 +120,14 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			if (subscribers == 1) {
 				subscribed.remove(service);
 
+				
 			} else {
 				subscribed.put(service, subscribers - 1);
 			}
 		}
 
+		
+		
 	}
 
 	public ServiceRegistryImpl() {
