@@ -50,7 +50,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								new LinkedList<InitializationEntry>());
 					}
 
-					if (subscribed.get(service) > 0) {
+					Integer subscribers = subscribed.get(service);
+					if (subscribers != null && subscribers > 0 ) {
 						callback.onSuccess((InterfaceType) service);
 						return;
 					}
@@ -60,8 +61,9 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						@Override
 						public void onStarted() {
 							callback.onSuccess((InterfaceType) service);
-
+							
 							synchronized (initializing) {
+								
 								List<InitializationEntry> entries = initializing
 										.get(service);
 								for (InitializationEntry e : entries) {
