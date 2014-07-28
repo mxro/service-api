@@ -58,6 +58,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					@Override
 					public void onStarted() {
 						callback.onSuccess((InterfaceType) service);
+						
+						synchronized (initializing) {
+							
+						}
+						
 					}
 
 					@Override
