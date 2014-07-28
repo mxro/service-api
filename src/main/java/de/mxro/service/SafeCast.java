@@ -3,7 +3,7 @@ package de.mxro.service;
 public interface SafeCast {
 
 	/**
-	 * Return true if this service can be cast to the provided type.
+	 * Return true if this object can be cast to the provided type.
 	 * 
 	 * @param interfaceType
 	 * @return
