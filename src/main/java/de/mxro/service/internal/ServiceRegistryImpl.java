@@ -9,6 +9,7 @@ import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
+import de.mxro.service.callbacks.ShutdownCallback;
 import de.mxro.service.callbacks.StartCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
@@ -16,8 +17,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	private final List<Service> services;
 	private final IdentityHashMap<Service, Integer> subscribed;
 	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
-	private final IdentityHashMap<Service, List<InitializationEntry>> deinitializing;
+	private final IdentityHashMap<Service, List<DeinitializationEntry>> deinitializing;
 
+	private final class DeinitializationEntry {
+		public ShutdownCallback callback;
+	}
+	
 	private final class InitializationEntry {
 
 		public GetServiceCallback<Object> callback;
@@ -61,7 +66,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 								new LinkedList<InitializationEntry>());
 					}
 
-					
+					synchronized (deinitializing) {
+						if (deinitializing.containsKey(service)) {
+							
+						}
+					}
 
 					service.start(new StartCallback() {
 
