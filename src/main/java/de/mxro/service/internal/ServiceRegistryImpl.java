@@ -106,7 +106,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	public ServiceRegistryImpl() {
 		super();
 		this.services = new ArrayList<Service>();
-		this.subscribed = new IdentityHashMap<Service, Boolean>();
+		this.subscribed = new IdentityHashMap<Service, Integer>();
 		this.initializing = new IdentityHashMap<Service, List<InitializationEntry>>();
 	}
 
