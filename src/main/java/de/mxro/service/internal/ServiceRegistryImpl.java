@@ -131,15 +131,14 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 				return;
 			}
-		}
+	
 		throw new RuntimeException(
 				"No service in registry which supports interface " + clazz);
 
 	}
 
 	@Override
-	public void unsubscribe(final Service service,
-			final ServiceUnsubscribedCallback callback) {
+	public void unsubscribe(final Service service, final ServiceUnsubscribedCallback callback) {
 		synchronized (subscribed) {
 			Integer subscribers = subscribed.get(service);
 
@@ -184,11 +183,14 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					});
 
 				}
+				return;
 
-			} else {
+			} 
+			
 				subscribed.put(service, subscribers - 1);
+		}
 				callback.onServiceUnsubscribed();
-			}
+			
 		}
 
 	}
