@@ -142,8 +142,10 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 	
 	@Override
-	public void unsubscribe(final Object service,
+	public void unsubscribe(final Object service_raw,
 			final ServiceUnsubscribedCallback callback) {
+		final Service service = (Service) service_raw;
+		
 		synchronized (subscribed) {
 			Integer subscribers = subscribed.get(service);
 
