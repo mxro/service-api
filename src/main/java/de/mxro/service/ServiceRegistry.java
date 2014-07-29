@@ -19,7 +19,7 @@ public interface ServiceRegistry {
 	 * Release a subscription for this service.
 	 * @param service
 	 */
-	public void unsubscribe(Service service, ServiceUnsubscribedCallback callback);
+	public void unsubscribe(Object service, ServiceUnsubscribedCallback callback);
 	
 	public void register(Service service);
 	
