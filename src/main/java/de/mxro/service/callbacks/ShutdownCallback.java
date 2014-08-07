@@ -13,7 +13,7 @@ import de.mxro.async.callbacks.SimpleCallback;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  * 
  */
-public abstract class ShutdownCallback extends SimpleCallback {
+public interface ShutdownCallback extends SimpleCallback {
 
 	/**
 	 * This method is called when the shutdown could be completed successfully.
