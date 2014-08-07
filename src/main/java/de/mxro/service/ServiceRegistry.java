@@ -1,6 +1,6 @@
 package de.mxro.service;
 
-import de.mxro.async.PotentialPromise;
+import de.mxro.async.PromiseBlueprint;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.fn.Success;
@@ -17,7 +17,7 @@ public interface ServiceRegistry {
 	 */
 	public <InterfaceType> void subscribe(Class<InterfaceType> clazz, ValueCallback<InterfaceType> callback);
 
-	public <InterfaceType> PotentialPromise<InterfaceType> subscribe(Class<InterfaceType> clazz);
+	public <InterfaceType> PromiseBlueprint<InterfaceType> subscribe(Class<InterfaceType> clazz);
 	
 	/**
 	 * Release a subscription for this service.
@@ -26,7 +26,7 @@ public interface ServiceRegistry {
 	public void unsubscribe(Object service, SimpleCallback callback);
 	
 	
-	public PotentialPromise<Success> unsubscribe(Object service);
+	public PromiseBlueprint<Success> unsubscribe(Object service);
 	
 	public void register(Service service);
 	
