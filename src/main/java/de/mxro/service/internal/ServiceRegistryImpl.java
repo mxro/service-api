@@ -8,6 +8,7 @@ import java.util.List;
 import de.mxro.async.AsyncPromise;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.fn.Success;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
@@ -164,22 +165,21 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	
 	@Override
-	public AsyncPromise<Void> unsubscribe(Object service) {
-		return new AsyncPromise<Void>() {
+	public AsyncPromise<Success> unsubscribe(Object service) {
+		return new AsyncPromise<Success>() {
 
 			@Override
-			public void get(final ValueCallback<Void> callback) {
+			public void get(final ValueCallback<Success> callback) {
 				unsubscribe(service, new SimpleCallback() {
 					
 					@Override
 					public void onFailure(Throwable t) {
-						// TODO Auto-generated method stub
 						
 					}
 					
 					@Override
 					public void onSuccess() {
-						callback.onSuccess(null);
+						callback.onSuccess(Success.INSTANCE);
 					}
 				});
 			}
