@@ -180,7 +180,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 							}
 
-							callback.onServiceUnsubscribed();
+							callback.onSuccess();
 						}
 
 						@Override
@@ -196,7 +196,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
 			subscribed.put(service, subscribers - 1);
 		}
-		callback.onServiceUnsubscribed();
+		callback.onSuccess();
 
 	}
 
