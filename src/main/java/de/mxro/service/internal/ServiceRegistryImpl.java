@@ -5,6 +5,7 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.mxro.async.AsyncPromise;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.service.SafeCast;
@@ -36,6 +37,24 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			services.add(service);
 		}
 	}
+
+	
+	
+	
+	@Override
+	public <InterfaceType> AsyncPromise<InterfaceType> subscribe(
+			final Class<InterfaceType> clazz) {
+		return new AsyncPromise<InterfaceType>() {
+
+			@Override
+			public void get(ValueCallback<InterfaceType> callback) {
+				subscribe(clazz, callback);
+			}
+		};
+	}
+
+
+
 
 	@SuppressWarnings("unchecked")
 	@Override
