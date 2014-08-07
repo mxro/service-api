@@ -16,7 +16,7 @@ public interface ShutdownCallback {
 	/**
 	 * This method is called when the shutdown could be completed successfully.
 	 */
-	public void onShutdownComplete();
+	public void onSuccess();
 
 	/**
 	 * This method is called when an error occurs in the shutdown process.

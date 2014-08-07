@@ -80,7 +80,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 						e.callback = new ShutdownCallback() {
 
 							@Override
-							public void onShutdownComplete() {
+							public void onSuccess() {
 								subscribe(clazz, callback);
 							}
 
@@ -169,12 +169,12 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					service.stop(new ShutdownCallback() {
 
 						@Override
-						public void onShutdownComplete() {
+						public void onSuccess() {
 							synchronized (deinitializing) {
 
 								for (DeinitializationEntry e : deinitializing
 										.get(service)) {
-									e.callback.onShutdownComplete();
+									e.callback.onSuccess();
 								}
 
 								deinitializing.remove(service);
