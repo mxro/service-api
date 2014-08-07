@@ -23,7 +23,11 @@
 	<!-- Dependent Modules -->
 	<dependencies>
 
-		
+		<dependency>
+			<groupId>de.mxro.async</groupId>
+			<artifactId>async-api</artifactId>
+			<version>[0.0.1,)</version>
+		</dependency>
 
 		<!-- only for gwt maven plugin!!! -->
 		<dependency>
@@ -158,7 +162,7 @@
 				</excludes>
 			</resource>
 
-		
+
 
 		</resources>
 
