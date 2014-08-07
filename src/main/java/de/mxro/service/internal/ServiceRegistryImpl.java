@@ -165,7 +165,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	
 	@Override
-	public AsyncPromise<Success> unsubscribe(Object service) {
+	public AsyncPromise<Success> unsubscribe(final Object service) {
 		return new AsyncPromise<Success>() {
 
 			@Override
@@ -174,7 +174,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					
 					@Override
 					public void onFailure(Throwable t) {
-						
+						callback.onFailure(t);
 					}
 					
 					@Override
@@ -185,8 +185,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 			}
 		};
 	}
-
-
 
 
 	@Override

@@ -1,6 +1,7 @@
 package de.mxro.service;
 
 import de.mxro.async.AsyncPromise;
+import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.fn.Success;
 
@@ -22,8 +23,10 @@ public interface ServiceRegistry {
 	 * Release a subscription for this service.
 	 * @param service
 	 */
-	public AsyncPromise<Success> unsubscribe(Object service);
+	public void unsubscribe(Object service, SimpleCallback callback);
 	
+	
+	public AsyncPromise<Success> unsubscribe(Object service);
 	
 	public void register(Service service);
 	
