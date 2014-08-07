@@ -161,6 +161,34 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	}
 
 	
+	
+	
+	@Override
+	public AsyncPromise<Void> unsubscribe(Object service) {
+		return new AsyncPromise<Void>() {
+
+			@Override
+			public void get(final ValueCallback<Void> callback) {
+				unsubscribe(service, new SimpleCallback() {
+					
+					@Override
+					public void onFailure(Throwable t) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onSuccess() {
+						callback.onSuccess(null);
+					}
+				});
+			}
+		};
+	}
+
+
+
+
 	@Override
 	public void unsubscribe(final Object service_raw,
 			final SimpleCallback callback) {
