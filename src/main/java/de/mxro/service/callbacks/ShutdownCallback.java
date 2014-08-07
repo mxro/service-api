@@ -5,13 +5,15 @@
  ******************************************************************************/
 package de.mxro.service.callbacks;
 
+import de.mxro.async.callbacks.SimpleCallback;
+
 /**
  * Callback, which can be used, when a service component is shut down.
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  * 
  */
-public interface ShutdownCallback {
+public interface ShutdownCallback extends SimpleCallback {
 
 	/**
 	 * This method is called when the shutdown could be completed successfully.
