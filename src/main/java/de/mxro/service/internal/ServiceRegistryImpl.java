@@ -5,7 +5,7 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.async.AsyncPromise;
+import de.mxro.async.PartialPromise;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.fn.Success;
@@ -43,9 +43,9 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	
 	@Override
-	public <InterfaceType> AsyncPromise<InterfaceType> subscribe(
+	public <InterfaceType> PartialPromise<InterfaceType> subscribe(
 			final Class<InterfaceType> clazz) {
-		return new AsyncPromise<InterfaceType>() {
+		return new PartialPromise<InterfaceType>() {
 
 			@Override
 			public void get(ValueCallback<InterfaceType> callback) {
@@ -165,8 +165,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	
 	@Override
-	public AsyncPromise<Success> unsubscribe(final Object service) {
-		return new AsyncPromise<Success>() {
+	public PartialPromise<Success> unsubscribe(final Object service) {
+		return new PartialPromise<Success>() {
 
 			@Override
 			public void get(final ValueCallback<Success> callback) {
