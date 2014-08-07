@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.mxro.async.callbacks.SimpleCallback;
+import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
@@ -39,7 +40,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <InterfaceType> void subscribe(final Class<InterfaceType> clazz,
-			final GetServiceCallback<InterfaceType> callback) {
+			final ValueCallback<InterfaceType> callback) {
 		ArrayList<Service> servicesCopy;
 		synchronized (services) {
 			servicesCopy = new ArrayList<Service>(services);
