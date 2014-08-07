@@ -1,5 +1,6 @@
 package de.mxro.service;
 
+import de.mxro.async.AsyncPromise;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 
@@ -15,6 +16,8 @@ public interface ServiceRegistry {
 	 */
 	public <InterfaceType> void subscribe(Class<InterfaceType> clazz, ValueCallback<InterfaceType> callback);
 
+	public <InterfaceType> AsyncPromise<InterfaceType> subscribe(Class<InterfaceType> clazz);
+	
 	/**
 	 * Release a subscription for this service.
 	 * @param service
