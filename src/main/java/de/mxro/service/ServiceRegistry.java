@@ -1,7 +1,7 @@
 package de.mxro.service;
 
+import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.service.callbacks.GetServiceCallback;
-import de.mxro.service.callbacks.ServiceUnsubscribedCallback;
 
 public interface ServiceRegistry {
 
@@ -19,7 +19,8 @@ public interface ServiceRegistry {
 	 * Release a subscription for this service.
 	 * @param service
 	 */
-	public void unsubscribe(Object service, ServiceUnsubscribedCallback callback);
+	public void unsubscribe(Object service, SimpleCallback callback);
+	
 	
 	public void register(Service service);
 	

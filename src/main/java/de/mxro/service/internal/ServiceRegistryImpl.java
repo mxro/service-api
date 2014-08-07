@@ -5,11 +5,11 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
-import de.mxro.service.callbacks.ServiceUnsubscribedCallback;
 import de.mxro.service.callbacks.ShutdownCallback;
 import de.mxro.service.callbacks.StartCallback;
 
@@ -143,7 +143,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 	
 	@Override
 	public void unsubscribe(final Object service_raw,
-			final ServiceUnsubscribedCallback callback) {
+			final SimpleCallback callback) {
 		final Service service = (Service) service_raw;
 		
 		synchronized (subscribed) {
