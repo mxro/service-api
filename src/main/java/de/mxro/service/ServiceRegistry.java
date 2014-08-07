@@ -22,7 +22,7 @@ public interface ServiceRegistry {
 	 * Release a subscription for this service.
 	 * @param service
 	 */
-	public void unsubscribe(Object service, SimpleCallback callback);
+	public AsyncPromise<Void> unsubscribe(Object service);
 	
 	
 	public void register(Service service);
