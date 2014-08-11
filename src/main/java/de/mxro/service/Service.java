@@ -3,6 +3,15 @@ package de.mxro.service;
 import de.mxro.service.callbacks.ShutdownCallback;
 import de.mxro.service.callbacks.StartCallback;
 
+/**
+ * <p>
+ * A service which can be started and stopped.
+ * <p>
+ * Use {@link ServiceRegistry} to manage services implementing this interface.
+ * 
+ * @author <a href="http://www.mxro.de">Max Rohde</a>
+ *
+ */
 public interface Service {
 
 	/**
