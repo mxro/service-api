@@ -6,7 +6,8 @@ import de.mxro.service.callbacks.StartCallback;
 public interface Service {
 
 	/**
-	 * Call to shutdown this components 'gracefully'.
+	 * Stops this service and releases all resources held required for the
+	 * service.
 	 * 
 	 * @param callback
 	 */
@@ -18,6 +19,5 @@ public interface Service {
 	 * @param callback
 	 */
 	public void start(StartCallback callback);
-	
-	
+
 }
