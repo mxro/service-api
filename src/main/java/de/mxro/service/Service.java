@@ -17,14 +17,14 @@ public interface Service {
 	 * Stops this service and releases all resources held required for the
 	 * service.
 	 * 
-	 * @param callback
+	 * @param callback The callback to be called upon successful or failed shutdown of the service.
 	 */
 	public void stop(SimpleCallback callback);
 
 	/**
 	 * Starting up this service.
 	 * 
-	 * @param callback
+	 * @param callback The callback to be called upon successful or failed startup of the service.
 	 */
 	public void start(SimpleCallback callback);
 
