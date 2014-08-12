@@ -14,7 +14,6 @@ import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
 import de.mxro.service.callbacks.ShutdownCallback;
-import de.mxro.service.callbacks.StartCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 
@@ -116,7 +115,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 					}
 				}
 			
-				service.start(new StartCallback() {
+				service.start(new SimpleCallback() {
 
 					@Override
 					public void onSuccess() {
