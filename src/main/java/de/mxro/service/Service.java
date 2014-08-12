@@ -1,7 +1,6 @@
 package de.mxro.service;
 
 import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.service.callbacks.ShutdownCallback;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ public interface Service {
 	 * 
 	 * @param callback
 	 */
-	public void stop(ShutdownCallback callback);
+	public void stop(SimpleCallback callback);
 
 	/**
 	 * Starting up this service.
