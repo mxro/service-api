@@ -119,7 +119,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 				service.start(new StartCallback() {
 
 					@Override
-					public void onStarted() {
+					public void onSuccess() {
 
 						final Integer subscribers;
 						synchronized (subscribed) {
