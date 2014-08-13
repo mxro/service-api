@@ -52,6 +52,10 @@ public class ShutdownHelperImpl implements ShutdownHelper {
 				}
 				int attempts = shutdownAttempts.incrementAndGet();
 				
+				if (attempts > MAX_ATTEMPTS) {
+					callback.onFailure(new Exception("Service could not be shut down in timeout."));
+					return;
+				}
 				
 				shutdown(callback);
 			}
