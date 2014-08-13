@@ -4,10 +4,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.mxro.async.callbacks.SimpleCallback;
+import de.mxro.service.utils.ActivityMonitor;
 import de.mxro.service.utils.ShutdownHelper;
 
 public class ShutdownHelperImpl implements ShutdownHelper {
 
+	private final ActivityMonitor activityMonitor;
+	
 	private final AtomicInteger shutdownAttempts;
 	private final AtomicBoolean isShutdown;
 	private final AtomicBoolean isShuttingDown;
@@ -29,6 +32,11 @@ public class ShutdownHelperImpl implements ShutdownHelper {
 		assert !this.isShutdown() && !this.isShuttingDown();
 		
 		this.isShuttingDown.set(true);
+		
+		if (activityMonitor.pendingOperations() == 0) {
+			
+			return;
+		}
 		
 	}
 
