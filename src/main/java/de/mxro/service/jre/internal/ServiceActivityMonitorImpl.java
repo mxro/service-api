@@ -23,4 +23,11 @@ public class ServiceActivityMonitorImpl implements ActivityMonitor {
 		return activeRequests.get();
 	}
 
+	public ServiceActivityMonitorImpl() {
+		super();
+		this.activeRequests = new AtomicInteger(0);
+	}
+
+	
+	
 }
