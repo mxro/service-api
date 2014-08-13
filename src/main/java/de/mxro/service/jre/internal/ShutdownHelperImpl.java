@@ -65,9 +65,9 @@ public class ShutdownHelperImpl implements ShutdownHelper {
 		}.start();
 	}
 
-	public ShutdownHelperImpl(OperationCounter activityMonitor) {
+	public ShutdownHelperImpl(OperationCounter operationCounter) {
 		super();
-		this.operationCounter = activityMonitor;
+		this.operationCounter = operationCounter;
 
 		this.shutdownAttempts = new AtomicInteger(0);
 		this.isShutdown = new AtomicBoolean(false);

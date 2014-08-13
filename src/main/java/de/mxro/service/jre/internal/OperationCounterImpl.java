@@ -6,7 +6,7 @@ import de.mxro.service.utils.OperationCounter;
 
 public class OperationCounterImpl implements OperationCounter {
 
-	AtomicInteger activeRequests;
+	private final AtomicInteger activeRequests;
 	
 	@Override
 	public void increase() {
