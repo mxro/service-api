@@ -1,6 +1,6 @@
-package de.mxro.service;
+package de.mxro.service.utils;
 
-public interface ServiceActivityMonitor {
+public interface ActivityMonitor {
 
 	
 	public void notifyOperationStarted();
