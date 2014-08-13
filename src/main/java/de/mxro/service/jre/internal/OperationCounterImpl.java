@@ -2,28 +2,28 @@ package de.mxro.service.jre.internal;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import de.mxro.service.utils.ActivityMonitor;
+import de.mxro.service.utils.OperationCounter;
 
-public class ServiceActivityMonitorImpl implements ActivityMonitor {
+public class OperationCounterImpl implements OperationCounter {
 
 	AtomicInteger activeRequests;
 	
 	@Override
-	public void notifyOperationStarted() {
+	public void increase() {
 		activeRequests.incrementAndGet();
 	}
 
 	@Override
-	public void notifyOperationCompleted() {
+	public void decrease() {
 		activeRequests.decrementAndGet();
 	}
 
 	@Override
-	public int pendingOperations() {
+	public int count() {
 		return activeRequests.get();
 	}
 
-	public ServiceActivityMonitorImpl() {
+	public OperationCounterImpl() {
 		super();
 		this.activeRequests = new AtomicInteger(0);
 	}
