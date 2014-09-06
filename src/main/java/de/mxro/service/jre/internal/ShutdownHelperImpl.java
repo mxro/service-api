@@ -9,69 +9,68 @@ import de.mxro.service.utils.ShutdownHelper;
 
 public class ShutdownHelperImpl implements ShutdownHelper {
 
-	private final OperationCounter operationCounter;
+    private final OperationCounter operationCounter;
 
-	private final AtomicInteger shutdownAttempts;
-	private final AtomicBoolean isShutdown;
-	private final AtomicBoolean isShuttingDown;
+    private final AtomicInteger shutdownAttempts;
+    private final AtomicBoolean isShutdown;
+    private final AtomicBoolean isShuttingDown;
 
-	private final static int DEFAULT_DELAY = 10;
-	private final static int MAX_ATTEMPTS = 300;
-	
-	@Override
-	public boolean isShutdown() {
-		return isShutdown.get();
-	}
+    private final static int DEFAULT_DELAY = 10;
+    private final static int MAX_ATTEMPTS = 300;
 
-	@Override
-	public boolean isShuttingDown() {
-		return isShuttingDown.get();
-	}
+    @Override
+    public boolean isShutdown() {
+        return isShutdown.get();
+    }
 
-	@Override
-	public void shutdown(final SimpleCallback callback) {
-		assert !this.isShutdown() && !this.isShuttingDown();
+    @Override
+    public boolean isShuttingDown() {
+        return isShuttingDown.get();
+    }
 
-		this.isShuttingDown.set(true);
+    @Override
+    public void shutdown(final SimpleCallback callback) {
+        assert !this.isShutdown() : "Cannot shut down already shut down server.";
+        assert !this.isShuttingDown() : "Cannot shut down server which is already shutting down.";
 
-		if (operationCounter.count() == 0) {
-			this.isShutdown.set(true);
-			callback.onSuccess();
+        this.isShuttingDown.set(true);
 
-			return;
-		}
+        if (operationCounter.count() == 0) {
+            this.isShutdown.set(true);
+            callback.onSuccess();
 
-		new Thread() {
+            return;
+        }
 
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(DEFAULT_DELAY);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-				int attempts = shutdownAttempts.incrementAndGet();
-				
-				if (attempts > MAX_ATTEMPTS) {
-					callback.onFailure(new Exception("Service could not be shut down in timeout."));
-					return;
-				}
-				
-				shutdown(callback);
-			}
-			
-			
-			
-		}.start();
-	}
+        new Thread() {
 
-	public ShutdownHelperImpl(OperationCounter operationCounter) {
-		super();
-		this.operationCounter = operationCounter;
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(DEFAULT_DELAY);
+                } catch (final InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                final int attempts = shutdownAttempts.incrementAndGet();
 
-		this.shutdownAttempts = new AtomicInteger(0);
-		this.isShutdown = new AtomicBoolean(false);
-		this.isShuttingDown = new AtomicBoolean(false);
-	}
+                if (attempts > MAX_ATTEMPTS) {
+                    callback.onFailure(new Exception("Service could not be shut down in timeout."));
+                    return;
+                }
+
+                shutdown(callback);
+            }
+
+        }.start();
+    }
+
+    public ShutdownHelperImpl(final OperationCounter operationCounter) {
+        super();
+        this.operationCounter = operationCounter;
+
+        this.shutdownAttempts = new AtomicInteger(0);
+        this.isShutdown = new AtomicBoolean(false);
+        this.isShuttingDown = new AtomicBoolean(false);
+    }
 
 }
