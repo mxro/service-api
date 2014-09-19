@@ -30,6 +30,12 @@
 			<version>[0.0.1,)</version>
 		</dependency>
 
+		<dependency>
+			<artifactId>concurrency-api</artifactId>
+			<groupId>de.mxro.concurrency</groupId>
+			<version>[0.0.1,)</version>
+		</dependency>
+
 		<!-- only for gwt maven plugin!!! -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
