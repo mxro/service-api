@@ -1,9 +1,9 @@
 package de.mxro.service.internal;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import de.mxro.async.callbacks.SimpleCallback;
+import de.mxro.concurrency.Concurrency;
+import de.mxro.concurrency.wrappers.SimpleAtomicBoolean;
+import de.mxro.concurrency.wrappers.SimpleAtomicInteger;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
 
@@ -11,9 +11,9 @@ public class ShutdownHelperImpl implements ShutdownHelper {
 
     private final OperationCounter operationCounter;
 
-    private final AtomicInteger shutdownAttempts;
-    private final AtomicBoolean isShutdown;
-    private final AtomicBoolean isShuttingDown;
+    private final SimpleAtomicInteger shutdownAttempts;
+    private final SimpleAtomicBoolean isShutdown;
+    private final SimpleAtomicBoolean isShuttingDown;
 
     private final static int DEFAULT_DELAY = 10;
     private final static int MAX_ATTEMPTS = 300;
@@ -64,13 +64,13 @@ public class ShutdownHelperImpl implements ShutdownHelper {
         }.start();
     }
 
-    public ShutdownHelperImpl(final OperationCounter operationCounter) {
+    public ShutdownHelperImpl(final OperationCounter operationCounter, final Concurrency con) {
         super();
         this.operationCounter = operationCounter;
 
-        this.shutdownAttempts = new AtomicInteger(0);
-        this.isShutdown = new AtomicBoolean(false);
-        this.isShuttingDown = new AtomicBoolean(false);
+        this.shutdownAttempts = con.newAtomicInteger(0);
+        this.isShutdown = con.newAtomicBoolean(false);
+        this.isShuttingDown = con.newAtomicBoolean(false);
     }
 
 }
