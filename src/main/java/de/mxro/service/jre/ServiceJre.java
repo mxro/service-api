@@ -1,7 +1,7 @@
 package de.mxro.service.jre;
 
-import de.mxro.service.jre.internal.OperationCounterImpl;
-import de.mxro.service.jre.internal.ShutdownHelperImpl;
+import de.mxro.service.internal.OperationCounterImpl;
+import de.mxro.service.internal.ShutdownHelperImpl;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
 

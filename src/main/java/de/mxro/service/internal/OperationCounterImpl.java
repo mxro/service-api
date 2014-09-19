@@ -1,4 +1,4 @@
-package de.mxro.service.jre.internal;
+package de.mxro.service.internal;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
