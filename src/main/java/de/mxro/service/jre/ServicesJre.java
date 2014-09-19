@@ -1,8 +1,7 @@
 package de.mxro.service.jre;
 
 import one.utils.jre.concurrent.JreConcurrency;
-import de.mxro.service.internal.OperationCounterImpl;
-import de.mxro.service.internal.ShutdownHelperImpl;
+import de.mxro.service.Services;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
 
@@ -16,7 +15,7 @@ public class ServicesJre {
      * @return A new operation counter instance.
      */
     public static final OperationCounter createOperationCounter() {
-        return new OperationCounterImpl(new JreConcurrency());
+        return Services.createOperationCounter(new JreConcurrency());
     }
 
     /**
@@ -27,7 +26,7 @@ public class ServicesJre {
      * @return
      */
     public static final ShutdownHelper createShutdownHelper(final OperationCounter operationCounter) {
-        return new ShutdownHelperImpl(operationCounter, new JreConcurrency());
+        return Services.createShutdownHelper(operationCounter, new JreConcurrency());
     }
 
 }
