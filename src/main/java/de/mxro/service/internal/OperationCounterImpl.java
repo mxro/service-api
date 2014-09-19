@@ -1,33 +1,31 @@
 package de.mxro.service.internal;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+import de.mxro.concurrency.Concurrency;
+import de.mxro.concurrency.wrappers.SimpleAtomicInteger;
 import de.mxro.service.utils.OperationCounter;
 
 public class OperationCounterImpl implements OperationCounter {
 
-	private final AtomicInteger activeRequests;
-	
-	@Override
-	public void increase() {
-		activeRequests.incrementAndGet();
-	}
+    private final SimpleAtomicInteger activeRequests;
 
-	@Override
-	public void decrease() {
-		activeRequests.decrementAndGet();
-	}
+    @Override
+    public void increase() {
+        activeRequests.incrementAndGet();
+    }
 
-	@Override
-	public int count() {
-		return activeRequests.get();
-	}
+    @Override
+    public void decrease() {
+        activeRequests.decrementAndGet();
+    }
 
-	public OperationCounterImpl() {
-		super();
-		this.activeRequests = new AtomicInteger(0);
-	}
+    @Override
+    public int count() {
+        return activeRequests.get();
+    }
 
-	
-	
+    public OperationCounterImpl(final Concurrency con) {
+        super();
+        this.activeRequests = con.newAtomicInteger(0);
+    }
+
 }
