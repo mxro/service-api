@@ -6,7 +6,7 @@ import de.mxro.service.internal.ShutdownHelperImpl;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
 
-public class ServiceJre {
+public class ServicesJre {
 
     /**
      * <p>
