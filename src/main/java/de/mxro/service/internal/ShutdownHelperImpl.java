@@ -14,6 +14,7 @@ public class ShutdownHelperImpl implements ShutdownHelper {
     private final SimpleAtomicInteger shutdownAttempts;
     private final SimpleAtomicBoolean isShutdown;
     private final SimpleAtomicBoolean isShuttingDown;
+    private final Concurrency con;
 
     private final static int DEFAULT_DELAY = 10;
     private final static int MAX_ATTEMPTS = 300;
@@ -42,7 +43,7 @@ public class ShutdownHelperImpl implements ShutdownHelper {
             return;
         }
 
-        new Thread() {
+        con.newTimer().scheduleOnce(1, new Runnable() {
 
             @Override
             public void run() {
@@ -60,14 +61,14 @@ public class ShutdownHelperImpl implements ShutdownHelper {
 
                 shutdown(callback);
             }
+        });
 
-        }.start();
     }
 
     public ShutdownHelperImpl(final OperationCounter operationCounter, final Concurrency con) {
         super();
         this.operationCounter = operationCounter;
-
+        this.con = con;
         this.shutdownAttempts = con.newAtomicInteger(0);
         this.isShutdown = con.newAtomicBoolean(false);
         this.isShuttingDown = con.newAtomicBoolean(false);
