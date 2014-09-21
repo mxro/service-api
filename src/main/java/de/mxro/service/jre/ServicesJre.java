@@ -1,6 +1,6 @@
 package de.mxro.service.jre;
 
-import one.utils.jre.concurrent.JreConcurrency;
+import de.mxro.concurrency.jre.JreConcurrency;
 import de.mxro.service.Services;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
