@@ -43,15 +43,11 @@ public class ShutdownHelperImpl implements ShutdownHelper {
             return;
         }
 
-        con.newTimer().scheduleOnce(1, new Runnable() {
+        con.newTimer().scheduleOnce(DEFAULT_DELAY, new Runnable() {
 
             @Override
             public void run() {
-                try {
-                    Thread.sleep(DEFAULT_DELAY);
-                } catch (final InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+
                 final int attempts = shutdownAttempts.incrementAndGet();
 
                 if (attempts > MAX_ATTEMPTS) {
