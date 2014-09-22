@@ -75,6 +75,10 @@ public class ServiceRegistryImpl implements ServiceRegistry {
                 }
                 System.out.println("already " + subscribers);
                 if (subscribers != null && subscribers > 0) {
+                    if (ENABLE_LOG) {
+                        System.out.println(this + ": Subscribed service " + service + " for the " + subscribers
+                                + " time.");
+                    }
                     callback.onSuccess((InterfaceType) service);
                     return;
                 }
