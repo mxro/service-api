@@ -73,7 +73,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
                 synchronized (subscribed) {
                     subscribers = subscribed.get(service);
                 }
-
+                System.out.println("already " + subscribers);
                 if (subscribers != null && subscribers > 0) {
                     callback.onSuccess((InterfaceType) service);
                     return;
