@@ -54,6 +54,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     @SuppressWarnings("unchecked")
     @Override
     public <InterfaceType> void subscribe(final Class<InterfaceType> clazz, final ValueCallback<InterfaceType> callback) {
+
         ArrayList<Service> servicesCopy;
         synchronized (services) {
             servicesCopy = new ArrayList<Service>(services);
@@ -128,6 +129,10 @@ public class ServiceRegistryImpl implements ServiceRegistry {
                                 return;
                             }
                             initializing.remove(service);
+                        }
+
+                        if (ENABLE_LOG) {
+                            System.out.println(this + ": Subscribed service " + service);
                         }
 
                         callback.onSuccess((InterfaceType) service);
