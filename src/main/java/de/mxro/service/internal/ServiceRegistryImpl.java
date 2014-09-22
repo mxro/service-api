@@ -17,7 +17,7 @@ import de.mxro.service.callbacks.ShutdownCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final List<Service> services;
     private final IdentityHashMap<Service, Integer> subscribed;
