@@ -56,7 +56,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     public <InterfaceType> void subscribe(final Class<InterfaceType> clazz, final ValueCallback<InterfaceType> callback) {
 
         if (ENABLE_LOG) {
-            new Exception("HERE").printStackTrace();
             System.out.println(this + ": Subscribing for " + clazz);
         }
 
