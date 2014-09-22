@@ -55,6 +55,11 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     @Override
     public <InterfaceType> void subscribe(final Class<InterfaceType> clazz, final ValueCallback<InterfaceType> callback) {
 
+        if (ENABLE_LOG) {
+            new Exception("HERE").printStackTrace();
+            System.out.println(this + ": Subscribing for " + clazz);
+        }
+
         ArrayList<Service> servicesCopy;
         synchronized (services) {
             servicesCopy = new ArrayList<Service>(services);
@@ -132,6 +137,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
                         }
 
                         if (ENABLE_LOG) {
+
                             System.out.println(this + ": Subscribed service " + service);
                         }
 
@@ -180,7 +186,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
         final Service service = (Service) service_raw;
 
         if (ENABLE_LOG) {
-            new Exception("HERE").printStackTrace();
+
             System.out.println(this + ": Unsubscribe service " + service_raw);
         }
 
