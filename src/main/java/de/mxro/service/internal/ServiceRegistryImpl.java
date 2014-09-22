@@ -180,6 +180,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
         final Service service = (Service) service_raw;
 
         if (ENABLE_LOG) {
+            new Exception("HERE").printStackTrace();
             System.out.println(this + ": Unsubscribe service " + service_raw);
         }
 
