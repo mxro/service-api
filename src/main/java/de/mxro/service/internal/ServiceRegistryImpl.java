@@ -17,240 +17,223 @@ import de.mxro.service.callbacks.ShutdownCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 
-	private final List<Service> services;
-	private final IdentityHashMap<Service, Integer> subscribed;
-	private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
-	private final IdentityHashMap<Service, List<DeinitializationEntry>> deinitializing;
+    private final boolean ENABLE_LOG = true;
 
-	private final class DeinitializationEntry {
-		public ShutdownCallback callback;
-	}
+    private final List<Service> services;
+    private final IdentityHashMap<Service, Integer> subscribed;
+    private final IdentityHashMap<Service, List<InitializationEntry>> initializing;
+    private final IdentityHashMap<Service, List<DeinitializationEntry>> deinitializing;
 
-	private final class InitializationEntry {
+    private final class DeinitializationEntry {
+        public ShutdownCallback callback;
+    }
 
-		public GetServiceCallback<Object> callback;
-	}
+    private final class InitializationEntry {
 
-	@Override
-	public void register(Service service) {
-		synchronized (services) {
-			services.add(service);
-		}
-	}
+        public GetServiceCallback<Object> callback;
+    }
 
-	
-	
-	
-	@Override
-	public <InterfaceType> Deferred<InterfaceType> subscribe(
-			final Class<InterfaceType> clazz) {
-		return new Deferred<InterfaceType>() {
+    @Override
+    public void register(final Service service) {
+        synchronized (services) {
+            services.add(service);
+        }
+    }
 
-			@Override
-			public void get(ValueCallback<InterfaceType> callback) {
-				subscribe(clazz, callback);
-			}
-		};
-	}
+    @Override
+    public <InterfaceType> Deferred<InterfaceType> subscribe(final Class<InterfaceType> clazz) {
+        return new Deferred<InterfaceType>() {
 
+            @Override
+            public void get(final ValueCallback<InterfaceType> callback) {
+                subscribe(clazz, callback);
+            }
+        };
+    }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <InterfaceType> void subscribe(final Class<InterfaceType> clazz, final ValueCallback<InterfaceType> callback) {
+        ArrayList<Service> servicesCopy;
+        synchronized (services) {
+            servicesCopy = new ArrayList<Service>(services);
+        }
 
+        for (final Service service : servicesCopy) {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <InterfaceType> void subscribe(final Class<InterfaceType> clazz,
-			final ValueCallback<InterfaceType> callback) {
-		ArrayList<Service> servicesCopy;
-		synchronized (services) {
-			servicesCopy = new ArrayList<Service>(services);
-		}
+            if (clazz.equals(service.getClass())
+                    || (service instanceof SafeCast && ((SafeCast) service).supports(clazz))) {
 
-		for (final Service service : servicesCopy) {
-			
-			if (clazz.equals(service.getClass())
-					|| (service instanceof SafeCast && ((SafeCast) service)
-							.supports(clazz))) {
-				
-				final Integer subscribers;
-				synchronized (subscribed) {
-					subscribers = subscribed.get(service);
-				}
-				
-				if (subscribers != null && subscribers > 0) {
-					callback.onSuccess((InterfaceType) service);
-					return;
-				}
+                final Integer subscribers;
+                synchronized (subscribed) {
+                    subscribers = subscribed.get(service);
+                }
 
-				synchronized (initializing) {
-					if (initializing.containsKey(service)) {
-						InitializationEntry e = new InitializationEntry();
-						e.callback = (GetServiceCallback<Object>) callback;
-						initializing.get(service).add(e);
-						return;
-					}
+                if (subscribers != null && subscribers > 0) {
+                    callback.onSuccess((InterfaceType) service);
+                    return;
+                }
 
-					initializing.put(service,
-							new LinkedList<InitializationEntry>());
-				}
+                synchronized (initializing) {
+                    if (initializing.containsKey(service)) {
+                        final InitializationEntry e = new InitializationEntry();
+                        e.callback = (GetServiceCallback<Object>) callback;
+                        initializing.get(service).add(e);
+                        return;
+                    }
 
-				synchronized (deinitializing) {
-					if (deinitializing.containsKey(service)) {
-						DeinitializationEntry e = new DeinitializationEntry();
-						e.callback = new ShutdownCallback() {
+                    initializing.put(service, new LinkedList<InitializationEntry>());
+                }
 
-							@Override
-							public void onSuccess() {
-								subscribe(clazz, callback);
-							}
+                synchronized (deinitializing) {
+                    if (deinitializing.containsKey(service)) {
+                        final DeinitializationEntry e = new DeinitializationEntry();
+                        e.callback = new ShutdownCallback() {
 
-							@Override
-							public void onFailure(Throwable t) {
-								callback.onFailure(new Exception(
-										"Error during pending deinitialization.",
-										t));
-							}
-						};
-						deinitializing.get(service).add(e);
-						return;
-					}
-				}
-			
-				service.start(new SimpleCallback() {
+                            @Override
+                            public void onSuccess() {
+                                subscribe(clazz, callback);
+                            }
 
-					@Override
-					public void onSuccess() {
+                            @Override
+                            public void onFailure(final Throwable t) {
+                                callback.onFailure(new Exception("Error during pending deinitialization.", t));
+                            }
+                        };
+                        deinitializing.get(service).add(e);
+                        return;
+                    }
+                }
 
-						final Integer subscribers;
-						synchronized (subscribed) {
-							subscribers = subscribed.get(service);
-							if (subscribers == null) {
-								subscribed.put(service, 1);
-							} else {
-								subscribed.put(service, subscribers + 1);
-							}
-						}
+                service.start(new SimpleCallback() {
 
-						synchronized (initializing) {
+                    @Override
+                    public void onSuccess() {
 
-							List<InitializationEntry> entries = initializing
-									.get(service);
-							for (InitializationEntry e : entries) {
-								e.callback.onSuccess(service);
-								return;
-							}
-							initializing.remove(service);
-						}
+                        final Integer subscribers;
+                        synchronized (subscribed) {
+                            subscribers = subscribed.get(service);
+                            if (subscribers == null) {
+                                subscribed.put(service, 1);
+                            } else {
+                                subscribed.put(service, subscribers + 1);
+                            }
+                        }
 
-						callback.onSuccess((InterfaceType) service);
+                        synchronized (initializing) {
 
-					}
+                            final List<InitializationEntry> entries = initializing.get(service);
+                            for (final InitializationEntry e : entries) {
+                                e.callback.onSuccess(service);
+                                return;
+                            }
+                            initializing.remove(service);
+                        }
 
-					@Override
-					public void onFailure(Throwable t) {
-						callback.onFailure(t);
-					}
-				});
+                        callback.onSuccess((InterfaceType) service);
 
-				return;
-			}
-	
-		}
-		throw new RuntimeException(
-				"No service in registry which supports interface " + clazz);
+                    }
 
-	}
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        callback.onFailure(t);
+                    }
+                });
 
-	
-	
-	
-	@Override
-	public Deferred<Success> unsubscribe(final Object service) {
-		return new Deferred<Success>() {
+                return;
+            }
 
-			@Override
-			public void get(final ValueCallback<Success> callback) {
-				unsubscribe(service, new SimpleCallback() {
-					
-					@Override
-					public void onFailure(Throwable t) {
-						callback.onFailure(t);
-					}
-					
-					@Override
-					public void onSuccess() {
-						callback.onSuccess(Success.INSTANCE);
-					}
-				});
-			}
-		};
-	}
+        }
+        throw new RuntimeException("No service in registry which supports interface " + clazz);
 
+    }
 
-	@Override
-	public void unsubscribe(final Object service_raw,
-			final SimpleCallback callback) {
-		final Service service = (Service) service_raw;
-		
-		synchronized (subscribed) {
-			Integer subscribers = subscribed.get(service);
+    @Override
+    public Deferred<Success> unsubscribe(final Object service) {
+        return new Deferred<Success>() {
 
-			if (subscribers == null || subscribers == 0) {
-				throw new IllegalArgumentException(
-						"Trying to unsubscribe service that has not been subscribed to.");
-			}
+            @Override
+            public void get(final ValueCallback<Success> callback) {
+                unsubscribe(service, new SimpleCallback() {
 
-			if (subscribers == 1) {
-				subscribed.remove(service);
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        callback.onFailure(t);
+                    }
 
-				synchronized (deinitializing) {
+                    @Override
+                    public void onSuccess() {
+                        callback.onSuccess(Success.INSTANCE);
+                    }
+                });
+            }
+        };
+    }
 
-					assert !deinitializing.containsKey(service);
+    @Override
+    public void unsubscribe(final Object service_raw, final SimpleCallback callback) {
+        final Service service = (Service) service_raw;
 
-					deinitializing
-							.put(service,
-									new LinkedList<ServiceRegistryImpl.DeinitializationEntry>());
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Unsubscribe service " + service_raw);
+        }
 
-					service.stop(new ShutdownCallback() {
+        synchronized (subscribed) {
+            final Integer subscribers = subscribed.get(service);
 
-						@Override
-						public void onSuccess() {
-							synchronized (deinitializing) {
+            if (subscribers == null || subscribers == 0) {
+                throw new IllegalArgumentException("Trying to unsubscribe service that has not been subscribed to.");
+            }
 
-								for (DeinitializationEntry e : deinitializing
-										.get(service)) {
-									e.callback.onSuccess();
-								}
+            if (subscribers == 1) {
+                subscribed.remove(service);
 
-								deinitializing.remove(service);
+                synchronized (deinitializing) {
 
-							}
+                    assert !deinitializing.containsKey(service);
 
-							callback.onSuccess();
-						}
+                    deinitializing.put(service, new LinkedList<ServiceRegistryImpl.DeinitializationEntry>());
 
-						@Override
-						public void onFailure(Throwable t) {
-							callback.onFailure(t);
-						}
-					});
+                    service.stop(new ShutdownCallback() {
 
-				}
-				return;
+                        @Override
+                        public void onSuccess() {
+                            synchronized (deinitializing) {
 
-			}
+                                for (final DeinitializationEntry e : deinitializing.get(service)) {
+                                    e.callback.onSuccess();
+                                }
 
-			subscribed.put(service, subscribers - 1);
-		}
-		callback.onSuccess();
+                                deinitializing.remove(service);
 
-	}
+                            }
 
-	public ServiceRegistryImpl() {
-		super();
-		this.services = new ArrayList<Service>();
-		this.subscribed = new IdentityHashMap<Service, Integer>();
-		this.initializing = new IdentityHashMap<Service, List<InitializationEntry>>();
-		this.deinitializing = new IdentityHashMap<Service, List<DeinitializationEntry>>();
-	}
+                            callback.onSuccess();
+                        }
+
+                        @Override
+                        public void onFailure(final Throwable t) {
+                            callback.onFailure(t);
+                        }
+                    });
+
+                }
+                return;
+
+            }
+
+            subscribed.put(service, subscribers - 1);
+        }
+        callback.onSuccess();
+
+    }
+
+    public ServiceRegistryImpl() {
+        super();
+        this.services = new ArrayList<Service>();
+        this.subscribed = new IdentityHashMap<Service, Integer>();
+        this.initializing = new IdentityHashMap<Service, List<InitializationEntry>>();
+        this.deinitializing = new IdentityHashMap<Service, List<DeinitializationEntry>>();
+    }
 
 }
