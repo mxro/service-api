@@ -4,12 +4,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<groupId>de.mxro.service</groupId>
 	<artifactId>service-api</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<description>An abstract API for the management of services.</description>
 	<url>https://github.com/mxro/service-api</url>
 
 	<properties>
-
 		<module.gwtVersion>2.5.1</module.gwtVersion>
 		<module.importedPackages>
 			org.junit,
