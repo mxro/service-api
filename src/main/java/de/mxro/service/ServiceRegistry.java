@@ -1,8 +1,8 @@
 package de.mxro.service;
 
-import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.promise.Deferred;
 import de.mxro.fn.Success;
 
 public interface ServiceRegistry {

@@ -5,9 +5,9 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.promise.Deferred;
 import de.mxro.fn.Success;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
