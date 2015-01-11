@@ -45,7 +45,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
         return new Deferred<InterfaceType>() {
 
             @Override
-            public void get(final ValueCallback<InterfaceType> callback) {
+            public void apply(final ValueCallback<InterfaceType> callback) {
                 subscribe(clazz, callback);
             }
         };
@@ -175,7 +175,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
         return new Deferred<Success>() {
 
             @Override
-            public void get(final ValueCallback<Success> callback) {
+            public void apply(final ValueCallback<Success> callback) {
                 unsubscribe(service, new SimpleCallback() {
 
                     @Override
