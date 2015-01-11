@@ -5,7 +5,7 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.async.Deferred;
+import de.mxro.async.Operation;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.fn.Success;
@@ -41,8 +41,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     }
 
     @Override
-    public <InterfaceType> Deferred<InterfaceType> subscribe(final Class<InterfaceType> clazz) {
-        return new Deferred<InterfaceType>() {
+    public <InterfaceType> Operation<InterfaceType> subscribe(final Class<InterfaceType> clazz) {
+        return new Operation<InterfaceType>() {
 
             @Override
             public void apply(final ValueCallback<InterfaceType> callback) {
@@ -171,8 +171,8 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     }
 
     @Override
-    public Deferred<Success> unsubscribe(final Object service) {
-        return new Deferred<Success>() {
+    public Operation<Success> unsubscribe(final Object service) {
+        return new Operation<Success>() {
 
             @Override
             public void apply(final ValueCallback<Success> callback) {
