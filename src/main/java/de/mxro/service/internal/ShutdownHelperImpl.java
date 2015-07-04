@@ -1,11 +1,11 @@
 package de.mxro.service.internal;
 
-import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.wrappers.SimpleAtomicBoolean;
 import de.mxro.concurrency.wrappers.SimpleAtomicInteger;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
+import delight.async.callbacks.SimpleCallback;
 
 public class ShutdownHelperImpl implements ShutdownHelper {
 

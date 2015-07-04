@@ -5,7 +5,7 @@
  ******************************************************************************/
 package de.mxro.service.callbacks;
 
-import de.mxro.async.callbacks.SimpleCallback;
+import delight.async.callbacks.SimpleCallback;
 
 /**
  * Callback, which can be used, when a service component is shut down.

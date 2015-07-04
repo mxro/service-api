@@ -5,15 +5,15 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.async.Operation;
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.fn.Success;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
 import de.mxro.service.callbacks.ShutdownCallback;
+import delight.async.Operation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 

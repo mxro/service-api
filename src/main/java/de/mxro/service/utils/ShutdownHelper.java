@@ -1,6 +1,6 @@
 package de.mxro.service.utils;
 
-import de.mxro.async.callbacks.SimpleCallback;
+import delight.async.callbacks.SimpleCallback;
 
 public interface ShutdownHelper {
 

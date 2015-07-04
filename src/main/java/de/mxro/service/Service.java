@@ -1,6 +1,6 @@
 package de.mxro.service;
 
-import de.mxro.async.callbacks.SimpleCallback;
+import delight.async.callbacks.SimpleCallback;
 
 /**
  * <p>
