@@ -5,7 +5,6 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.fn.Success;
 import de.mxro.service.SafeCast;
 import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
@@ -14,6 +13,7 @@ import de.mxro.service.callbacks.ShutdownCallback;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Success;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 

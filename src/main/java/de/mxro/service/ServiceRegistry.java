@@ -1,9 +1,9 @@
 package de.mxro.service;
 
-import de.mxro.fn.Success;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Success;
 
 public interface ServiceRegistry {
 
