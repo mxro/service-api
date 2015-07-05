@@ -1,5 +1,10 @@
 package de.mxro.service.internal;
 
+import delight.async.Operation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+import delight.functional.Success;
+
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
@@ -10,10 +15,6 @@ import de.mxro.service.Service;
 import de.mxro.service.ServiceRegistry;
 import de.mxro.service.callbacks.GetServiceCallback;
 import de.mxro.service.callbacks.ShutdownCallback;
-import delight.async.Operation;
-import delight.async.callbacks.SimpleCallback;
-import delight.async.callbacks.ValueCallback;
-import delight.functional.Success;
 
 public class ServiceRegistryImpl implements ServiceRegistry {
 
