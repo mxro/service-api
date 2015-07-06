@@ -1,7 +1,8 @@
 package de.mxro.service.internal;
 
-import de.mxro.concurrency.Concurrency;
-import de.mxro.concurrency.wrappers.SimpleAtomicInteger;
+import delight.concurrency.Concurrency;
+import delight.concurrency.wrappers.SimpleAtomicInteger;
+
 import de.mxro.service.utils.OperationCounter;
 
 public class OperationCounterImpl implements OperationCounter {

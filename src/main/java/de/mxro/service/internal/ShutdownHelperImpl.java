@@ -1,10 +1,10 @@
 package de.mxro.service.internal;
 
 import delight.async.callbacks.SimpleCallback;
+import delight.concurrency.Concurrency;
+import delight.concurrency.wrappers.SimpleAtomicBoolean;
+import delight.concurrency.wrappers.SimpleAtomicInteger;
 
-import de.mxro.concurrency.Concurrency;
-import de.mxro.concurrency.wrappers.SimpleAtomicBoolean;
-import de.mxro.concurrency.wrappers.SimpleAtomicInteger;
 import de.mxro.service.utils.OperationCounter;
 import de.mxro.service.utils.ShutdownHelper;
 

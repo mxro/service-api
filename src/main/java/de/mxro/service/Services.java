@@ -1,6 +1,7 @@
 package de.mxro.service;
 
-import de.mxro.concurrency.Concurrency;
+import delight.concurrency.Concurrency;
+
 import de.mxro.service.internal.OperationCounterImpl;
 import de.mxro.service.internal.ServiceRegistryImpl;
 import de.mxro.service.internal.ShutdownHelperImpl;
